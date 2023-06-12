@@ -1,0 +1,62 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from google.colab import files
+
+# Carregar o arquivo do dataset
+uploaded = files.upload()
+
+# Ler o arquivo do dataset
+df = pd.read_csv(next(iter(uploaded)))
+
+# Visualizar as primeiras linhas do dataset
+df.head()
+
+# Visualização do número de partidas ao longo dos anos
+df['Year'] = pd.to_datetime(df['CreationTime']).dt.year
+yearly_matches = df['Year'].value_counts().sort_index()
+
+plt.figure(figsize=(10, 6))
+sns.barplot(x=yearly_matches.index, y=yearly_matches.values, color='blue')
+plt.xlabel('Ano')
+plt.ylabel('Número de Partidas')
+plt.title('Número de Partidas de LoL por Ano')
+plt.show()
+
+# Distribuição das vitórias entre as equipes Azul e Vermelha
+win_distribution = df['Winner'].value_counts()
+
+plt.figure(figsize=(6, 6))
+sns.countplot(x='Winner', data=df, palette='Set1')
+plt.xlabel('Equipe Vencedora')
+plt.ylabel('Número de Partidas')
+plt.title('Distribuição das Vitórias por Equipe')
+plt.show()
+
+# Análise das taxas de vitória dos campeões mais populares
+top_champions = df['Champion'].value_counts().nlargest(10)
+win_rates = df[df['Champion'].isin(top_champions.index)]['Winner'].groupby(df['Champion']).mean()
+
+plt.figure(figsize=(12, 6))
+sns.barplot(x=win_rates.index, y=win_rates.values, color='green')
+plt.xlabel('Campeões')
+plt.ylabel('Taxa de Vitória')
+plt.title('Taxa de Vitória dos Campeões Mais Populares')
+plt.xticks(rotation=45)
+plt.show()
+
+# Estudo da duração média das partidas
+df['Duration'] = pd.to_timedelta(df['Duration'])
+average_duration = df['Duration'].mean().total_seconds() / 60
+
+print(f"Duração média das partidas: {average_duration:.2f} minutos")
+
+# Identificação de tendências em relação às escolhas de campeões e estratégias de jogo
+champion_counts = df['Champion'].value_counts().nlargest(5)
+strategy_counts = df['Position'].value_counts().nlargest(5)
+
+print("Campeões mais escolhidos:")
+print(champion_counts)
+
+print("\nPosições mais populares:")
+print(strategy_counts)
