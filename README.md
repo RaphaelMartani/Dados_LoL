@@ -18,5 +18,5 @@ Prof. Edson M. de Souza
 
 ---
 
-[League of Legends - estatísticas básicas para todos os jogos desde 2015-2107 em todas as ligas profissionais, exceto na China.](https://www.kaggle.com/datasets/chuckephron/leagueoflegends)
+[Estatisticas masters de valorant](https://liquipedia.net/valorant/VCT/2022/Stage_1/Masters/Statistics)
 
